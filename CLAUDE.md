@@ -33,15 +33,20 @@ npm run export                           # PDF/PNG 等にエクスポート
 
 ```
 .
-├─ slides.md              # Slidev エントリポイント
+├─ slides.md              # Slidev エントリポイント（現在は機能デモデッキ）
+├─ components/            # Vue コンポーネント（自動インポート。GsapBoxes / GsapCounter）
+├─ examples/              # 雛形・サンプル（book-template.md など）
 ├─ public/                # 画像など静的ファイル（/image.png で参照）
 ├─ notes/                 # 章別の読書メモ（任意）
-├─ docs/                  # プロジェクトドキュメント（計画・テンプレ）
+├─ docs/                  # プロジェクトドキュメント（計画・Slidev ガイド・テンプレ）
 ├─ .github/workflows/
 │  └─ deploy.yml          # GitHub Pages デプロイ（docs/templates/ にテンプレあり）
 ├─ package.json
 └─ README.md
 ```
+
+> 使い方の詳細は [docs/slidev-guide.md](./docs/slidev-guide.md)（アニメ / GSAP / アイコン / UI / コード）。
+> 外部ライブラリは `npm i` → `components/*.vue` 内で `import` して使うのが基本。アイコンは `@iconify-json/*` を入れて `i-<set>-<name>` クラスで使う。
 
 ## 作業方針 / 規約
 

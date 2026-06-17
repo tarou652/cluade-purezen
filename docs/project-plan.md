@@ -104,10 +104,13 @@
 ## 📁 想定ディレクトリ構成
 
 ```
-book-summary-slides/
-├─ slides.md              # エントリポイント（Slidev）
+cluade-purezen/
+├─ slides.md              # エントリポイント（Slidev / 現在は機能デモ）
+├─ components/            # Vue コンポーネント（自動インポート）
+├─ examples/              # 雛形・サンプル（book-template.md）
 ├─ public/                # 画像など静的ファイル
 ├─ notes/                 # 章別の読書メモ（任意）
+├─ docs/                  # 計画・Slidev ガイド・テンプレ
 ├─ .github/workflows/
 │  └─ deploy.yml          # GitHub Pages デプロイ
 ├─ package.json
