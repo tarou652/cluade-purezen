@@ -428,6 +428,263 @@ class: text-center
 </div>
 
 ---
+layout: section
+---
+
+# 13. 機能フルツアー 🧭
+
+公式ガイドの「残り」の機能を一気に
+
+---
+
+# 13-1. 行番号 & 外部コード取り込み
+
+<div class="grid grid-cols-2 gap-6 mt-4">
+<div>
+
+**行番号** `{lines:true}`
+
+```ts {2|3}{lines:true}
+const a = 1
+const b = 2
+const c = a + b
+```
+
+</div>
+<div>
+
+**外部ファイルを取り込む** `<<< @/path`
+
+<<< @/snippets/demo.ts {1-3}{lines:true}
+
+</div>
+</div>
+
+<div class="text-sm opacity-60 mt-2">
+  <code>@</code> はプロジェクトルート。実体は <code>snippets/demo.ts</code>。
+</div>
+
+---
+
+# 13-2. Monaco エディタ & コード実行
+
+<div class="grid grid-cols-2 gap-6 mt-2">
+<div>
+
+**編集できるコード** `{monaco}`
+
+```ts {monaco}
+const msg: string = 'edit me!'
+console.log(msg.toUpperCase())
+```
+
+</div>
+<div>
+
+**その場で実行** `{monaco-run}`（▶ を押す）
+
+```ts {monaco-run}
+const nums = [1, 2, 3, 4, 5]
+console.log(nums.reduce((a, b) => a + b, 0))
+```
+
+</div>
+</div>
+
+<div class="text-sm opacity-60 mt-1">Monaco はブラウザで動く本物のエディタ。型補完も効く。</div>
+
+---
+
+# 13-3. Monaco Diff & TwoSlash
+
+<div class="grid grid-cols-2 gap-6 mt-2">
+<div>
+
+**差分表示** `{monaco-diff}`（`~~~` で区切る）
+
+```ts {monaco-diff}
+function add(a, b) {
+  return a + b
+}
+~~~
+function add(a: number, b: number) {
+  return a + b
+}
+```
+
+</div>
+<div>
+
+**TwoSlash**（型をホバー表示）` ```ts twoslash`
+
+```ts twoslash
+const user = { name: 'Ada', age: 36 }
+//    ^?
+```
+
+</div>
+</div>
+
+---
+
+# 13-4. PlantUML 図
+
+Mermaid 以外に **PlantUML** も書ける（レンダリングに外部サーバへの通信が必要）。
+
+```plantuml {scale: 0.7}
+@startuml
+actor User
+User -> Browser : open
+Browser -> Server : request
+Server --> Browser : HTML
+Browser --> User : render
+@enduml
+```
+
+---
+
+# 13-5. MDC 構文
+
+`mdc: true` を有効にすると、Markdown に直接クラスやスタイルを付けられる。
+
+インライン: これは [赤くて太い文字]{.text-rose-500.font-bold} です。
+
+ブロックでラップ:
+
+::div{.mt-4.p-4.rounded-xl.bg-sky-500.text-white.text-center}
+MDC のブロック構文で囲んだ要素
+::
+
+```md
+[赤い文字]{.text-rose-500}
+::div{.p-4.bg-sky-500}
+中身
+::
+```
+
+---
+zoom: 0.8
+---
+
+# 13-6. スライドのズーム
+
+このスライドはフロントマターに `zoom: 0.8` を指定して、
+**全体を 80% に縮小**して表示している。
+
+情報量が多いスライドや、コードを詰めたいときに便利。
+
+```md
+---
+zoom: 0.8
+---
+```
+
+---
+src: ./examples/partials/imported.md
+---
+
+---
+
+# 13-7. スライドの分割取り込み（src）
+
+直前のスライドは、フロントマターに `src:` を書いて
+**別ファイルの中身を読み込んだ**もの。
+
+```md
+---
+src: ./examples/partials/imported.md
+---
+```
+
+- 章ごとにファイルを分けて管理 → 巨大な `slides.md` を回避
+- 取り込み元のフロントマターと**マージ**される（frontmatter merging）
+
+---
+
+# 13-8. Global Layers（全スライド共通レイヤー）
+
+画面 **左下** に「📖 Slidev 実践ガイド」のフッターが
+全ページ出ているのに気づきましたか？
+
+これは [global-bottom.vue](./global-bottom.vue) によるもの。
+
+| ファイル | 重なる位置 |
+| --- | --- |
+| `global-top.vue` | 全スライドの**前面**（最上層） |
+| `global-bottom.vue` | 全スライドの**背面**（最下層） |
+
+共通の透かし・ロゴ・ページ番号・背景アニメ等に使う。
+
+---
+
+# 13-9. 発表者ノート & クリックマーカー
+
+ノート内に `[click]` と書くと、**クリックのタイミングに同期**して
+ノートのハイライト位置が進む（Presenter モードで確認）。
+
+このスライドのノートを Presenter で開いてみてください。
+
+<!--
+最初に話すこと。
+
+[click] 1回目のクリックで話すこと。
+
+[click] 2回目のクリックで話すこと。
+-->
+
+<div v-click>クリック1</div>
+<div v-click>クリック2</div>
+
+---
+layout: two-cols
+---
+
+# 13-10. UI 操作系の機能
+
+マウス／キーボードで使う機能（コードではなく操作）:
+
+- 🖊 **手書き注釈（Drawing）** — ツールバーのペンで書き込み
+- 🎥 **カメラ／録画** — 自分の映像を重ねて録画
+- ✏️ **統合エディタ** — 右下メニューからその場で編集
+- 🗂 **概要（Overview）** — 全スライド一覧
+- 🌓 **ダークモード** — ワンタッチ切替
+
+::right::
+
+# 主なショートカット
+
+| キー | 動作 |
+| --- | --- |
+| <kbd>Space</kbd>/<kbd>→</kbd> | 次へ |
+| <kbd>←</kbd> | 戻る |
+| <kbd>o</kbd> | 概要表示 |
+| <kbd>d</kbd> | ダークモード |
+| <kbd>g</kbd> | スライド移動 |
+| <kbd>f</kbd> | 全画面 |
+
+Presenter は `/presenter` を開く。
+
+---
+layout: center
+class: text-center
+---
+
+# 13-11. さらに上のカスタム（設定ファイル）
+
+| 設定 | ファイル |
+| --- | --- |
+| フォント | フロントマター `fonts: { sans, mono }` |
+| テーマ / アドオン | `theme:` / `addons:` |
+| Vue アプリ拡張 | `setup/main.ts` |
+| KaTeX / Mermaid / Monaco | `setup/*.ts` |
+| カスタムレイアウト | `layouts/*.vue` |
+| AI 連携 | アドオンで対応 |
+
+<div class="text-sm opacity-60 mt-4">
+  これらは「設定ファイルを置く」タイプのカスタム。詳細は公式の各 Customization ページへ。
+</div>
+
+---
 layout: center
 class: text-center
 ---
