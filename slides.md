@@ -684,6 +684,47 @@ class: text-center
   これらは「設定ファイルを置く」タイプのカスタム。詳細は公式の各 Customization ページへ。
 </div>
 
+# 13-12. デザインシステム & カスタム CSS
+
+`uno.config.ts` で**色トークン**と**再利用クラス**を定義、`style.css` で**共通CSS**。
+
+<div class="grid grid-cols-2 gap-8 mt-4">
+<div>
+
+**色トークン**（`uno.config.ts` の `theme.colors`）
+
+<div class="flex gap-2 mt-2">
+  <div class="w-12 h-12 rounded-lg bg-brand" />
+  <div class="w-12 h-12 rounded-lg bg-brand-light" />
+  <div class="w-12 h-12 rounded-lg bg-brand-dark" />
+  <div class="w-12 h-12 rounded-lg bg-accent" />
+</div>
+
+`bg-brand` `text-accent` のように<br>どこでも使える。
+
+</div>
+<div>
+
+**再利用クラス**（`shortcuts`）
+
+<div class="flex flex-col gap-3 mt-2 items-start">
+  <span class="chip"><span class="i-bi-stars" /> chip</span>
+  <button class="btn"><span class="i-bi-rocket-takeoff" /> btn</button>
+  <button class="btn-outline">btn-outline</button>
+</div>
+
+</div>
+</div>
+
+<div class="card mt-6">
+  <span class="title-gradient text-xl font-bold">title-gradient</span> ・ この枠は <code>card</code> クラス。見出し下の線は <code>style.css</code> の共通CSS。
+</div>
+
+<style>
+/* スライド内のスタイルブロックはこのスライドだけに効く（scoped） */
+h1 { color: var(--brand-dark); }
+</style>
+
 ---
 layout: center
 class: text-center

@@ -364,6 +364,77 @@ $$ \frac{1}{n}\sum_{i=1}^{n}(\hat y_i - y_i)x_i $$
 
 スライド単位の `<style>` は **scoped**（そのスライドだけ）。全体に効かせたいときは `<style>` に `:global(...)` を使うか `style.css` に書く。
 
+> 注意: スライド内 `<style>` の **コメントに `<style>` という文字列を書かない**こと。HTML パーサが要素開始と誤認してビルドエラー（"Element is missing end tag"）になる。
+
+---
+
+## 9.5. デザインシステム（共通の色 & カスタム CSS）
+
+「使う色を決めて、どのスライドでも同じ見た目を再利用する」には2つの仕組みを使う。
+このプロジェクトでは実際に設定済み（[../uno.config.ts](../uno.config.ts) / [../style.css](../style.css)、デモは `slides.md` の 13-12）。
+
+### (a) `uno.config.ts` — 色トークン & 再利用クラス
+
+Slidev はルートの `uno.config.ts` を読み込み、**内蔵設定（アイコン等）とマージ**する。
+
+```ts
+// uno.config.ts
+import { defineConfig } from 'unocss'
+
+export default defineConfig({
+  theme: {
+    colors: {
+      brand: { DEFAULT: '#0d9488', light: '#5eead4', dark: '#0f766e' },
+      accent: '#e11d48',
+    },
+  },
+  shortcuts: {
+    // クラスの組み合わせに名前を付けて再利用
+    btn: 'px-4 py-1.5 rounded-lg bg-brand text-white hover:bg-brand-dark transition',
+    card: 'p-5 rounded-2xl bg-white/60 shadow-lg ring-1 ring-black/5',
+    chip: 'inline-flex items-center px-2.5 py-0.5 rounded-full text-sm bg-brand-light/30 text-brand-dark',
+  },
+})
+```
+
+- 定義した色は `bg-brand` / `text-accent` / `border-brand-dark` のように **どのスライドでも**使える。
+- `shortcuts` は `<button class="btn">` / `<div class="card">` のように使い回せる（後から一括変更も楽）。
+- 重要: `uno.config.ts` を置いても **preset-icons などはマージで維持**される（アイコンは壊れない）。
+
+### (b) `style.css` — グローバル CSS & デザイントークン
+
+ルートの `style.css` は自動読込。CSS 変数（トークン）や全スライド共通のスタイルを書く。
+
+```css
+:root {
+  --brand: #0d9488;
+  --accent: #e11d48;
+}
+
+/* 例: すべての見出しの下にアクセントライン */
+.slidev-layout h1::after {
+  content: '';
+  display: block;
+  width: 2.5rem; height: 3px;
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+}
+
+::selection { background: color-mix(in srgb, var(--brand) 35%, transparent); }
+```
+
+- 素の CSS からは `var(--brand)` でトークン参照。
+- `.slidev-layout` は各スライドのルート要素。これを起点に全体へ効かせる。
+
+### 使い分け
+
+| やりたいこと | 場所 |
+| --- | --- |
+| 色・余白の値を1か所で管理 | `uno.config.ts` の `theme` ＋ `style.css` の `:root` 変数 |
+| 「ボタン」「カード」等の再利用パーツ | `uno.config.ts` の `shortcuts` |
+| 全スライド共通の地のスタイル | `style.css` |
+| このスライドだけの微調整 | スライド内 `<style>`（scoped） |
+| 全ページ共通の“要素”（ロゴ等） | `global-top.vue` / `global-bottom.vue` |
+
 ---
 
 ## 10. ビルド & 公開

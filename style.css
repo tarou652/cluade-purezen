@@ -1,0 +1,42 @@
+/* Slidev はルートの style.css を自動で読み込む（全スライド共通のグローバルCSS）。 */
+
+/* デザイントークン（CSS 変数）。素の CSS からも var(--brand) で参照できる */
+:root {
+  --brand: #0d9488;
+  --brand-dark: #0f766e;
+  --accent: #e11d48;
+}
+
+/* 範囲選択の色をブランドカラーに */
+::selection {
+  background: color-mix(in srgb, var(--brand) 35%, transparent);
+}
+
+/* 見出しの下にブランドのアクセントライン（全スライド共通） */
+.slidev-layout h1 {
+  position: relative;
+  padding-bottom: 0.25em;
+}
+.slidev-layout h1::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 2.5rem;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+}
+
+/* インラインコードの見た目を少し調整 */
+.slidev-layout code:not(pre code) {
+  background: color-mix(in srgb, var(--brand) 14%, transparent);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+
+/* 中央寄せレイアウトでは h1 の下線を中央に */
+.slidev-layout.text-center h1::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
