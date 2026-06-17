@@ -449,6 +449,24 @@ npm run export                           # PDF / PNG 等にエクスポート（
 
 公開（GitHub Pages）の手順は [project-plan.md](./project-plan.md) と [../CLAUDE.md](../CLAUDE.md) を参照。
 
+### ⚠️ GitHub Pages で「ページ遷移のたびに 404」になるとき
+
+GitHub Pages は URL 書き換え（rewrite）に対応していないため、**history ルーター**だと
+スライド遷移・リロード時に Slidev の 404 ページが出る。**ハッシュルーター**にすれば解決:
+
+```md
+---
+# 先頭スライドのヘッドマター
+routerMode: hash   # URL が .../#/3 の形になり 404 を回避
+---
+```
+
+- アセット用の `--base /<repo>/` は引き続き必要（404 はルーティングの問題、アセットは別）。
+- Netlify / Vercel のように `/* → /index.html` の rewrite が書けるホストなら history のままでOK。
+
+> 補足: ローカルで Git Bash から `--base /xxx/` を渡すと「base should start with a slash」警告が出るが、
+> これは Git Bash のパス変換による誤検知。CI（Linux）では正しく適用されるので無視してよい。
+
 ---
 
 ## 参考リンク

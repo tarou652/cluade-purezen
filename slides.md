@@ -7,6 +7,9 @@ info: |
 class: text-center
 transition: slide-left
 mdc: true
+# GitHub Pages など静的ホスティングではハッシュルーターにすると
+# ページ遷移・リロード時の 404 を回避できる（URL は .../#/3 の形になる）
+routerMode: hash
 ---
 
 # Slidev 実践ガイド 🚀

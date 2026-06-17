@@ -66,6 +66,8 @@ npm run export                           # PDF/PNG 等にエクスポート
 
 ※ Pages の Source を設定する前に push すると build は通っても deploy ステップが失敗する。先に Source 設定を済ませること。
 
+※ GitHub Pages は rewrite 非対応のため、ルーティングは **ハッシュルーター**（`slides.md` ヘッドマターの `routerMode: hash`）を使う。これが無いと「ページ遷移のたびに 404」になる。
+
 ## 進め方の順序
 
 Phase 0（土台づくり）→ Phase 1（読書しながら抽出）→ Phase 2（構成設計）→ Phase 3（実装）→ Phase 4（公開）→ Phase 5（仕上げ）。詳細は [docs/project-plan.md](./docs/project-plan.md)。
