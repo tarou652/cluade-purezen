@@ -315,7 +315,7 @@ Slidev には UI 部品が標準搭載。`<Arrow>` / `<Toc>` / `<Youtube>` / `<v
 
 **ドラッグできる要素**（編集モードで動かせる）
 
-<div v-drag="[80, 280, 180, 60]" class="border-2 border-dashed border-teal-400 rounded p-2 text-center text-sm">
+<div v-drag="[80,161,394,299]" class="border-2 border-dashed border-teal-400 rounded p-2 text-center text-sm">
   ドラッグしてみて
 </div>
 
