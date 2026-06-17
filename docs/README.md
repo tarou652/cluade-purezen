@@ -4,6 +4,7 @@ Book Summary Slides プロジェクトのドキュメント一覧。
 
 - [project-plan.md](./project-plan.md) — プロジェクト計画（Phase 0〜5、著作権メモ、ディレクトリ構成）
 - [slidev-guide.md](./slidev-guide.md) — Slidev 使い方 & カスタムガイド（アニメ / GSAP / アイコン / UI / コード）
+- [troubleshooting.md](./troubleshooting.md) — ⚠️ つまずきポイント集（サブパス公開の404 など。**公開前に必読**）
 - [templates/deploy.yml](./templates/deploy.yml) — GitHub Pages デプロイ用 workflow テンプレート
 
 ## デモ
