@@ -449,23 +449,44 @@ npm run export                           # PDF / PNG 等にエクスポート（
 
 公開（GitHub Pages）の手順は [project-plan.md](./project-plan.md) と [../CLAUDE.md](../CLAUDE.md) を参照。
 
-### ⚠️ GitHub Pages で「ページ遷移のたびに 404」になるとき
+### ⚠️ サブパス公開（/<repo>/）でスライド送りが 404 になる問題
 
-GitHub Pages は URL 書き換え（rewrite）に対応していないため、**history ルーター**だと
-スライド遷移・リロード時に Slidev の 404 ページが出る。**ハッシュルーター**にすれば解決:
+**症状**: GitHub Pages の `https://user.github.io/<repo>/` で公開すると、1枚目は出るが
+**次のスライドへ進むと 404**（Slidev の NotFound）になる。
 
-```md
----
-# 先頭スライドのヘッドマター
-routerMode: hash   # URL が .../#/3 の形になり 404 を回避
----
+**原因**: Slidev 52.x の `getSlidePath()` は `BASE_URL + 番号`（例 `/cluade-purezen/2`）を
+`router.push()` に渡すが、スライドのルートは `/:no`（例 `/2`）。サブパス公開で `BASE_URL` が
+`/` でないと、base が付いたパスがルートにマッチせず NotFound になる
+（ハッシュルーターでも `#/cluade-purezen/2` となり同様に 404）。
+
+**対処（このプロジェクトで採用）**: ルーターガードで余分な base を1つ剥がして送り直す。
+[../setup/main.ts](../setup/main.ts) に実装済み:
+
+```ts
+// setup/main.ts
+import { defineAppSetup } from '@slidev/types'
+
+export default defineAppSetup(({ router }) => {
+  const base = import.meta.env.BASE_URL
+  if (!base || base === '/') return
+  router.beforeEach((to) => {
+    if (to.name === 'NotFound' && to.path.startsWith(base)) {
+      const fixed = `/${to.path.slice(base.length)}`           // /cluade-purezen/2 → /2
+      if (fixed !== to.path)
+        return { path: fixed, query: to.query, hash: to.hash, replace: true }
+    }
+  })
+})
 ```
 
-- アセット用の `--base /<repo>/` は引き続き必要（404 はルーティングの問題、アセットは別）。
-- Netlify / Vercel のように `/* → /index.html` の rewrite が書けるホストなら history のままでOK。
+これで URL は `/cluade-purezen/2` のままきれいに保たれ、送り・直リンク・リロードすべて動く。
+加えて、リロード/直リンク用に **`404.html` を `index.html` のコピー**にする（SPA フォールバック。
+deploy.yml の `cp dist/index.html dist/404.html`）。これは history ルーターが base を除いて
+スライド番号を解決するため。
 
 > 補足: ローカルで Git Bash から `--base /xxx/` を渡すと「base should start with a slash」警告が出るが、
-> これは Git Bash のパス変換による誤検知。CI（Linux）では正しく適用されるので無視してよい。
+> これは Git Bash のパス変換による誤検知。CI（Linux）では正しく適用されるので無視してよい
+> （PowerShell からなら正しく渡る）。
 
 ---
 

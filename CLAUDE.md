@@ -66,7 +66,7 @@ npm run export                           # PDF/PNG 等にエクスポート
 
 ※ Pages の Source を設定する前に push すると build は通っても deploy ステップが失敗する。先に Source 設定を済ませること。
 
-※ GitHub Pages は rewrite 非対応のため、ルーティングは **ハッシュルーター**（`slides.md` ヘッドマターの `routerMode: hash`）を使う。これが無いと「ページ遷移のたびに 404」になる。
+※ サブパス公開（`/cluade-purezen/`）では、Slidev 52.x の `getSlidePath` が base を二重に付けてスライド送りが 404 になる。対策として [setup/main.ts](./setup/main.ts) のルーターガードで余分な base を剥がしている（消すと「2枚目から 404」になる）。リロード/直リンク用に deploy.yml で `404.html` を `index.html` のコピーにしている。詳細は [docs/slidev-guide.md](./docs/slidev-guide.md)。
 
 ## 進め方の順序
 

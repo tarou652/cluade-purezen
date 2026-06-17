@@ -25,31 +25,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build -- --base /cluade-purezen/
-      # 履歴形式URL(.../3)で来ても、ハッシュルーターのURL(.../#/...)へ転送する 404.html を生成。
-      # これで古いリンクや直リンクでも 404 にならない。
-      - name: Generate redirecting 404.html
-        run: |
-          cat > dist/404.html <<'HTML'
-          <!DOCTYPE html>
-          <html lang="ja">
-          <head>
-            <meta charset="utf-8">
-            <title>Redirecting…</title>
-            <script>
-              (function () {
-                var base = '/cluade-purezen/';
-                var p = location.pathname;
-                if (p.indexOf(base) === 0 && p !== base) {
-                  location.replace(base + '#' + p + location.search);
-                } else {
-                  location.replace(base);
-                }
-              })();
-            </script>
-          </head>
-          <body>Redirecting…</body>
-          </html>
-          HTML
+      # SPA フォールバック: 直リンク/リロード時に未知パスでも index.html を返す。
+      # （history ルーターが base を除いてスライド番号を解決する）
+      - run: cp dist/index.html dist/404.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
