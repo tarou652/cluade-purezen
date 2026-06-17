@@ -684,6 +684,8 @@ class: text-center
   これらは「設定ファイルを置く」タイプのカスタム。詳細は公式の各 Customization ページへ。
 </div>
 
+---
+
 # 13-12. デザインシステム & カスタム CSS
 
 `uno.config.ts` で**色トークン**と**再利用クラス**を定義、`style.css` で**共通CSS**。
