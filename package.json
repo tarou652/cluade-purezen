@@ -6,9 +6,11 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "slidev --open",
-    "build": "slidev build",
-    "export": "slidev export"
+    "dev": "slidev book.md --open",
+    "dev:guide": "slidev slides.md --open",
+    "build": "slidev build book.md --out dist && slidev build slides.md --base /guide/ --out dist/guide",
+    "build:pages": "slidev build book.md --base /cluade-purezen/ --out dist && slidev build slides.md --base /cluade-purezen/guide/ --out dist/guide",
+    "export": "slidev export book.md"
   },
   "dependencies": {
     "@slidev/cli": "^52.16.0",

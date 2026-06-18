@@ -24,10 +24,13 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
-      - run: npm run build -- --base /cluade-purezen/
+      # 2デッキを別フォルダにビルド: 本=トップ / 使い方ガイド=/guide/
+      - run: npm run build:pages
       # SPA フォールバック: 直リンク/リロード時に未知パスでも index.html を返す。
       # （history ルーターが base を除いてスライド番号を解決する）
+      # デッキごとに自分の index.html を 404 にする（番号解決が base 単位のため）。
       - run: cp dist/index.html dist/404.html
+      - run: cp dist/guide/index.html dist/guide/404.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
