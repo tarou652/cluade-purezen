@@ -1,42 +1,112 @@
 /* Slidev はルートの style.css を自動で読み込む（全スライド共通のグローバルCSS）。 */
+/* ===== Blueprint / 設計図 テーマ（調査ベースで再設計）=====
+   方針は docs/presentation-design-guide.md を参照。
+   3色厳格化（無彩色 + ネイビー + amber 一点）/ 本文は濃いグレー /
+   見出しは下線“箱”をやめ短いアクセント線 / 反転は章扉(section)だけ。 */
 
-/* デザイントークン（CSS 変数）。素の CSS からも var(--brand) で参照できる */
 :root {
-  --brand: #0d9488;
-  --brand-dark: #0f766e;
-  --accent: #e11d48;
+  --bp-paper: #F5F6F8;   /* 背景：オフホワイト（70%）*/
+  --bp-ink:   #16223A;   /* 見出し：ネイビー（メイン25%）*/
+  --bp-body:  #3A465C;   /* 本文：濃いグレー（黒より柔らかい）*/
+  --bp-slate: #6B7891;   /* 罫線・補足 */
+  --bp-amber: #E0922B;   /* アクセント（5%・一点）*/
+  --bp-code:  #0E1A2B;   /* コード地 */
 }
 
-/* 範囲選択の色をブランドカラーに */
-::selection {
-  background: color-mix(in srgb, var(--brand) 35%, transparent);
+::selection { background: color-mix(in srgb, var(--bp-amber) 30%, transparent); }
+
+/* ---- ベース ---- */
+.slidev-layout {
+  background-color: var(--bp-paper) !important;
+  background-image: none !important;
+  color: var(--bp-body);
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  line-height: 1.65;
 }
 
-/* 見出しの下にブランドのアクセントライン（全スライド共通） */
-.slidev-layout h1 {
-  position: relative;
-  padding-bottom: 0.25em;
+/* ---- 見出し（ネイビー・2書体系の display）---- */
+.slidev-layout h1,
+.slidev-layout h2,
+.slidev-layout h3 {
+  color: var(--bp-ink);
+  font-family: 'Space Grotesk', 'Zen Kaku Gothic New', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
+.slidev-layout h1 { margin-bottom: 0.7em; }
+
+/* 見出しの“箱バー”をやめ、短い amber アクセント線に（左寄せ用）*/
+.slidev-layout h1 { position: relative; padding-bottom: 0.28em; }
 .slidev-layout h1::after {
   content: '';
   position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 2.5rem;
-  height: 3px;
+  left: 0; bottom: 0;
+  width: 2.6rem; height: 3px;
   border-radius: 3px;
-  background: linear-gradient(90deg, var(--brand), var(--accent));
+  background: var(--bp-amber);
+}
+/* 中央寄せ・表紙はアクセント線を中央に／表紙は出さない */
+.slidev-layout.text-center h1::after { left: 50%; transform: translateX(-50%); }
+.slidev-layout.cover h1::after { display: none; }
+
+/* ---- 本文の“呼吸”（余白・行間）---- */
+.slidev-layout ul { padding-left: 1.15em; }
+.slidev-layout li { margin-bottom: 0.4em; }
+.slidev-layout li::marker { color: var(--bp-amber); }
+
+/* ---- 強調は色でなく太さ＋ネイビー ---- */
+.slidev-layout strong { color: var(--bp-ink); font-weight: 700; }
+
+/* ---- リンク・引用 ---- */
+.slidev-layout a {
+  color: var(--bp-ink);
+  text-decoration: none;
+  border-bottom: 2px solid var(--bp-amber);
+}
+.slidev-layout blockquote {
+  border-left: 3px solid var(--bp-amber);
+  color: var(--bp-ink);
+  background: transparent;
+  font-style: normal;
+  padding-left: 0.9em;
 }
 
-/* インラインコードの見た目を少し調整 */
+/* ---- コード（ターミナル風ネイビー地）/ インラインは控えめ ---- */
+.slidev-layout pre,
+.slidev-layout .shiki { background: var(--bp-code) !important; border-radius: 8px; }
 .slidev-layout code:not(pre code) {
-  background: color-mix(in srgb, var(--brand) 14%, transparent);
+  background: color-mix(in srgb, var(--bp-slate) 16%, transparent);
+  color: var(--bp-ink);
   border-radius: 4px;
-  padding: 0.1em 0.35em;
+  padding: 0.08em 0.35em;
+}
+.slidev-layout kbd {
+  background: var(--bp-ink);
+  color: var(--bp-paper);
+  border-radius: 4px;
+  padding: 0 .35em;
 }
 
-/* 中央寄せレイアウトでは h1 の下線を中央に */
-.slidev-layout.text-center h1::after {
-  left: 50%;
-  transform: translateX(-50%);
+/* ---- 表：ヘアラインで軽く ---- */
+.slidev-layout th {
+  color: var(--bp-slate);
+  font-weight: 600;
+  border-bottom: 2px solid var(--bp-slate);
+}
+.slidev-layout td,
+.slidev-layout th { border-color: rgba(107, 120, 145, 0.22); }
+
+/* ===== section（章扉）だけ全面ネイビー反転 + // プレフィックス ===== */
+.slidev-layout.section {
+  background-color: var(--bp-ink) !important;
+  background-image: none !important;
+  color: var(--bp-paper);
+}
+.slidev-layout.section h1 { color: #fff; }
+.slidev-layout.section h1::after { display: none; }
+.slidev-layout.section h1::before {
+  content: '// ';
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 400;
+  color: var(--bp-amber);
 }
