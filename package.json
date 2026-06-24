@@ -8,9 +8,11 @@
   "scripts": {
     "dev": "slidev book.md --open",
     "dev:guide": "slidev slides.md --open",
+    "dev:skill": "slidev skill-presentation.md --open",
     "build": "slidev build book.md --out dist && slidev build slides.md --base /guide/ --out dist/guide",
     "build:pages": "slidev build book.md --base /cluade-purezen/ --out dist && slidev build slides.md --base /cluade-purezen/guide/ --out dist/guide",
-    "export": "slidev export book.md"
+    "export": "slidev export book.md",
+    "export:skill": "slidev export skill-presentation.md --format pptx --output skill-presentation.pptx"
   },
   "dependencies": {
     "@slidev/cli": "^52.16.0",
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "@iconify-json/bi": "^1.2.7",
-    "@iconify-json/carbon": "^1.2.23"
+    "@iconify-json/carbon": "^1.2.23",
+    "playwright-chromium": "^1.61.1"
   }
 }
