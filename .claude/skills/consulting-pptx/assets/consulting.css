@@ -1,0 +1,67 @@
+/*
+ * consulting-pptx (Slidev版) — ハウスデザインを「コードで固定」する共通スタイル
+ * ------------------------------------------------------------
+ * 白背景 × 赤(#C8102E)アクセント × Yu Gothic。全スライド外周に赤い縁取り。
+ * このスタイルはデッキ先頭スライドの <style> にそのまま貼る（= 全スライドへ適用）。
+ * 色やフォントを変えたいときは下の :root だけを編集すれば全体に効く。
+ */
+
+:root {
+  --c-red:        #C8102E; /* 主役の赤（コンサルレッド） */
+  --c-red-dark:   #8A0A20; /* 濃い赤（ダーク章扉） */
+  --c-red-tint:   #FBEAEC; /* ごく薄い赤（カード/結論の地色） */
+  --c-ink:        #1A1A1A; /* 本文・見出し */
+  --c-gray:       #595959; /* 補助テキスト */
+  --c-gray-light: #8C8C8C; /* キャプション・ページ番号 */
+  --c-rule:       #E3E3E3; /* ヘアライン */
+  --c-card:       #F6F6F6; /* ニュートラルなカード地色 */
+  --c-frame:      7px;     /* 赤い外周フレームの太さ（0 で無効化したいときは下の box-shadow を消す） */
+}
+
+/* ── 全スライド共通: 白地・和文フォント・赤い外周フレーム ── */
+.slidev-layout {
+  background: #fff;
+  color: var(--c-ink);
+  font-family: "Yu Gothic", "YuGothic", "Hiragino Kaku Gothic ProN",
+               "Noto Sans JP", "Meiryo", sans-serif;
+  box-shadow: inset 0 0 0 var(--c-frame) var(--c-red);
+  padding: 3.0rem 3.4rem;
+}
+
+.slidev-layout h1 { font-weight: 700; color: var(--c-ink); line-height: 1.25; letter-spacing: .01em; }
+.slidev-layout h2 { font-weight: 700; color: var(--c-ink); }
+.slidev-layout a  { color: var(--c-red); text-underline-offset: 3px; }
+.slidev-layout strong { color: var(--c-ink); }
+
+/* 箇条書きは赤い四角マーカー（読みやすさ優先で本文はinkのまま） */
+.slidev-layout ul { list-style: none; padding-left: 0; }
+.slidev-layout ul > li { position: relative; padding-left: 1.3em; margin: .45em 0; line-height: 1.5; }
+.slidev-layout ul > li::before {
+  content: ""; position: absolute; left: 0; top: .55em;
+  width: .5em; height: .5em; background: var(--c-red);
+}
+.slidev-layout ul ul > li::before { background: var(--c-gray-light); }
+
+/* 引用は赤い縦罫 */
+.slidev-layout blockquote {
+  border-left: 3px solid var(--c-red);
+  color: var(--c-gray); background: transparent;
+}
+
+/* ── 共通パーツ用クラス ── */
+
+/* キッカー（赤い小見出しラベル）。本文スライドのテーマ表示に使う */
+.c-kicker {
+  color: var(--c-red); font-weight: 700; font-size: .78rem;
+  letter-spacing: .14em; text-transform: uppercase; margin-bottom: .35rem;
+}
+
+/* 大きな数字はサンセリフでシャープに */
+.c-num { font-family: "Arial", "Helvetica Neue", sans-serif; font-variant-numeric: tabular-nums; }
+
+/* 任意のフッター（左ラベル＋右ページ番号）。使うなら本文末尾に置く */
+.c-footer {
+  position: absolute; left: 3.4rem; right: 3.4rem; bottom: 1.4rem;
+  display: flex; justify-content: space-between;
+  font-size: .72rem; color: var(--c-gray-light);
+}
