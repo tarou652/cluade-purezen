@@ -1,30 +1,26 @@
 ---
-theme: seriph
+theme: apple-basic
 title: Claude Skill 入門 〜ハーネスエンジニアへの第一歩〜
 info: |
   Claude の「Skill」を、なぜ使うのか・どう動くのかから、
   実際に使って・作ってみるところまで紹介する資料。
   出典: 『Claude Code で学ぶ Agent Skills 入門』佐藤 亮（Kindle版）。1・2章を中心に構成。
-class: text-center
+layout: intro
 transition: slide-left
 mdc: true
 fonts:
-  sans: Inter, Noto Sans JP
-  serif: Space Grotesk, Zen Kaku Gothic New
+  sans: Helvetica Neue, Noto Sans JP
+  serif: Noto Serif JP
   mono: JetBrains Mono
-  weights: '300,400,600,700'
+  weights: '300,400,500,600,700'
 ---
 
 # Claude Skill 入門 🛠️
 
-〜ハーネスエンジニアへの第一歩〜
+ハーネスエンジニアへの第一歩
 
-<div class="pt-8 text-sm opacity-60">
-  スペース / → で次へ ・ <kbd>o</kbd> で全体表示
-</div>
-
-<div class="abs-br m-6 text-sm opacity-50">
-  使い方ガイドは <a href="./guide/">/guide/</a>
+<div class="absolute bottom-10 text-sm opacity-60">
+  スペース / → で次へ ・ <kbd>o</kbd> で全体表示 ・ 使い方ガイドは <a href="./guide/">/guide/</a>
 </div>
 
 <!--
@@ -526,3 +522,18 @@ layout: center
 <div class="text-sm opacity-60 pt-6">
 引用は最小限・要約は自分の言葉で（著作権配慮）
 </div>
+
+<style>
+/* ── apple-basic 準拠の配色（白地 × #1d1d1f × システムブルー #0071e3） ── */
+/* 全スライド共通。テーマの色はここで一元管理する。 */
+:root {
+  --slidev-theme-primary: #0071e3; /* Apple システムブルー */
+}
+.slidev-layout {
+  color: #1d1d1f;
+  background: #ffffff;
+}
+.slidev-layout blockquote {
+  border-color: var(--slidev-theme-primary);
+}
+</style>
