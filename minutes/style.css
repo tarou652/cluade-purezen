@@ -1,0 +1,203 @@
+@import './styles/dads-tokens.css';
+
+/*
+ * AI議事録デッキのスタイル。Slidev はデッキと同じフォルダの style.css を自動で読み込む。
+ *
+ * 方針: ルールは「読んで守る」のではなく「書けば守られる」ようにする。
+ *   - 色・文字サイズ・余白は DADS トークン（styles/dads-tokens.css）だけを参照する
+ *   - 何も指定しなければ左揃え。中央寄せは .cover と .section だけ
+ *   - text-center を書いても表紙と章扉以外では効かない
+ *   - 引用ブロックは装飾しない（キャッチコピー置き場にしない）
+ * 検査は scripts/lint-slides.mjs、ルールの説明は docs/slide-rules.md。
+ */
+
+:root {
+  /* 色: DADS のニュートラル + キーカラー1色。原色・グラデーションは使わない */
+  --slide-bg: var(--color-neutral-white);
+  --slide-text: var(--color-neutral-solid-gray-800);
+  --slide-heading: var(--color-neutral-solid-gray-900);
+  --slide-muted: var(--color-neutral-solid-gray-600);
+  --slide-rule: var(--color-neutral-solid-gray-200);
+  --slide-subtle-bg: var(--color-neutral-solid-gray-50);
+  --slide-key: var(--color-key-900);
+  --slide-key-bg: var(--color-key-1000);
+
+  /* 余白: 8px グリッド */
+  --space-4: calc(4 / 16 * 1rem);
+  --space-8: calc(8 / 16 * 1rem);
+  --space-16: calc(16 / 16 * 1rem);
+  --space-24: calc(24 / 16 * 1rem);
+  --space-32: calc(32 / 16 * 1rem);
+  --space-40: calc(40 / 16 * 1rem);
+  --space-48: calc(48 / 16 * 1rem);
+  --space-64: calc(64 / 16 * 1rem);
+
+  /*
+   * グラフ用パレット: 「ダッシュボードデザインの実践ガイドブック」の7色
+   * (Solid Gray / Blue / Light Blue / Cyan / Green / Orange / Red) を DADS の
+   * プリミティブから当てたもの。段階(数字)はガイドブック本体の付録と照合して確定させること。
+   * 系列は --chart-1 から順に使い、強調したい系列以外は --chart-base に落とす。
+   */
+  --chart-base: var(--color-neutral-solid-gray-420);
+  --chart-1: var(--color-primitive-blue-900);
+  --chart-2: var(--color-primitive-light-blue-800);
+  --chart-3: var(--color-primitive-cyan-900);
+  --chart-4: var(--color-primitive-green-800);
+  --chart-5: var(--color-primitive-orange-800);
+  --chart-6: var(--color-primitive-red-800);
+  --chart-grid: var(--color-neutral-solid-gray-100);
+}
+
+/* ---- ベース ---- */
+.slidev-layout {
+  background: var(--slide-bg);
+  color: var(--slide-text);
+  font-family: var(--font-family-sans);
+  /* std-20N-150 */
+  font-size: calc(20 / 16 * 1rem);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  padding: var(--space-40) var(--space-48) var(--space-48);
+  height: 100%;
+  position: relative;
+  text-align: left;
+}
+
+/* 見出しは主張の一文。長くなる前提で 32px / 行間 1.5（std-32B-150） */
+.slidev-layout h1 {
+  color: var(--slide-heading);
+  font-size: calc(32 / 16 * 1rem);
+  font-weight: bold;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  margin: 0 0 var(--space-32);
+  max-width: 26em;
+}
+/* std-24B-150 */
+.slidev-layout h2 {
+  color: var(--slide-heading);
+  font-size: calc(24 / 16 * 1rem);
+  font-weight: bold;
+  line-height: 1.5;
+  margin: 0 0 var(--space-16);
+}
+/* std-20B-150 */
+.slidev-layout h3 {
+  color: var(--slide-heading);
+  font-size: calc(20 / 16 * 1rem);
+  font-weight: bold;
+  line-height: 1.5;
+  margin: 0 0 var(--space-8);
+}
+
+.slidev-layout p { margin: 0 0 var(--space-16); }
+.slidev-layout ul,
+.slidev-layout ol { margin: 0 0 var(--space-16); padding-left: 1.25em; }
+.slidev-layout ul { list-style: disc; }
+.slidev-layout ol { list-style: decimal; }
+.slidev-layout li { margin-bottom: var(--space-8); }
+.slidev-layout li::marker { color: var(--slide-muted); }
+
+/* 強調は太さだけ。色や下線で飾らない */
+.slidev-layout strong { font-weight: bold; color: inherit; }
+.slidev-layout em { font-style: normal; }
+
+.slidev-layout a {
+  color: var(--slide-key);
+  text-decoration: underline;
+  text-decoration-thickness: calc(1 / 16 * 1rem);
+  text-underline-offset: calc(3 / 16 * 1rem);
+}
+
+/* 引用は出典つきの本物の引用だけ。大きく・色付きにしない */
+.slidev-layout blockquote {
+  margin: 0 0 var(--space-16);
+  padding-left: var(--space-16);
+  border-left: calc(4 / 16 * 1rem) solid var(--slide-rule);
+  color: var(--slide-text);
+  font-size: inherit;
+  font-style: normal;
+  background: none;
+}
+
+/* 表: DADS table に合わせた罫線 */
+.slidev-layout table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: calc(18 / 16 * 1rem);
+  line-height: 1.6;
+}
+.slidev-layout th,
+.slidev-layout td {
+  text-align: left;
+  vertical-align: top;
+  padding: var(--space-8) var(--space-16) var(--space-8) 0;
+  border-bottom: 1px solid var(--slide-rule);
+}
+.slidev-layout th {
+  font-weight: bold;
+  color: var(--slide-heading);
+  border-bottom: 2px solid var(--color-neutral-solid-gray-800);
+}
+
+.slidev-layout code:not(pre code) {
+  font-family: var(--font-family-mono);
+  background: var(--slide-subtle-bg);
+  border-radius: var(--border-radius-4);
+  padding: 0 var(--space-4);
+}
+.slidev-layout pre {
+  font-family: var(--font-family-mono);
+  font-size: calc(16 / 16 * 1rem);
+  border-radius: var(--border-radius-8);
+  padding: var(--space-16);
+}
+
+/* 中央寄せの“逃げ道”を塞ぐ: 表紙と章扉以外では text-center を無効化 */
+.slidev-layout:not(.cover):not(.section) .text-center,
+.slidev-layout:not(.cover):not(.section).text-center { text-align: left; }
+
+/* ---- 表紙: 中央寄せを許可する2つのうち1つ ---- */
+.slidev-layout.cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+/* std-45B-140 */
+.slidev-layout.cover h1 {
+  font-size: calc(45 / 16 * 1rem);
+  line-height: 1.4;
+  letter-spacing: 0;
+  margin: 0 auto var(--space-24);
+  max-width: 20em;
+}
+.slidev-layout.cover p { color: var(--slide-muted); }
+
+/* ---- 章扉: キーカラー反転。中央寄せを許可するもう1つ ---- */
+.slidev-layout.section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: var(--slide-key-bg);
+  color: var(--color-neutral-white);
+}
+.slidev-layout.section h1 {
+  color: var(--color-neutral-white);
+  font-size: calc(36 / 16 * 1rem);
+  line-height: 1.4;
+  margin: 0 auto var(--space-16);
+}
+.slidev-layout.section p { color: var(--color-key-100); }
+
+/* ---- 2カラム（グリッド自体は Slidev 標準レイアウトのまま、列間だけ揃える）---- */
+.slidev-layout.two-cols-header { column-gap: var(--space-40); }
+
+/*
+ * v-click は class: reveal-steps（手順）か reveal-compare（比較）を付けたスライドだけで使う。
+ * 手順は済んだ項目をディムして「今どこか」を示す。比較は並べたまま残す。
+ */
+.reveal-steps .slidev-vclick-prior { opacity: 0.45; transition: opacity 0.2s; }
