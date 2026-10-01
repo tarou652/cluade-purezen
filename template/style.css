@@ -68,6 +68,8 @@
   position: relative;
   text-align: left;
   box-shadow: inset 0 0 0 var(--slide-frame) var(--slide-key);
+  /* 日本語の折り返しを文節単位にする（カードや見出しで1〜2文字だけの行を防ぐ）*/
+  word-break: auto-phrase;
 }
 
 /* 見出しは主張の一文。長くなる前提で 32px / 行間 1.5（std-32B-150）。下に赤い短線 */
@@ -78,9 +80,11 @@
   line-height: 1.5;
   letter-spacing: 0.01em;
   margin: 0 0 var(--space-32);
-  max-width: 26em;
+  max-width: 28em;
   position: relative;
   padding-bottom: var(--space-16);
+  /* 2行の長さを揃える（「…が変わ / る」のような短い行を防ぐ）*/
+  text-wrap: balance;
 }
 .slidev-layout h1::after {
   content: '';

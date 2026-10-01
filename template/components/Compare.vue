@@ -1,22 +1,24 @@
 <script setup lang="ts">
 // 2つを左右に並べて比べる。左（before / 従来）はグレー、右（after / 提案）は赤。
 //   <Compare :left="{ title: '今', items: ['…'] }" :right="{ title: '導入後', items: ['…'] }" />
+// 前後関係のない並列の比較（A案とB案など）は :arrow="false" で矢印を消す。
 // 段階表示はしない（v-click が必要なら class: reveal-compare のスライドで two-cols-header を使う）。
-defineProps<{
+withDefaults(defineProps<{
   left: { title: string, items: string[] }
   right: { title: string, items: string[] }
-}>()
+  arrow?: boolean
+}>(), { arrow: true })
 </script>
 
 <template>
-  <div class="compare">
+  <div class="compare" :class="{ 'no-arrow': !arrow }">
     <div class="side left">
       <div class="head">{{ left.title }}</div>
       <ul>
         <li v-for="(t, i) in left.items" :key="i">{{ t }}</li>
       </ul>
     </div>
-    <carbon-arrow-right class="arrow" />
+    <carbon-arrow-right v-if="arrow" class="arrow" />
     <div class="side right">
       <div class="head">{{ right.title }}</div>
       <ul>
@@ -32,6 +34,10 @@ defineProps<{
   grid-template-columns: 1fr auto 1fr;
   align-items: stretch;
   gap: var(--space-16);
+}
+.compare.no-arrow {
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-24);
 }
 .side {
   border-radius: var(--border-radius-8);
