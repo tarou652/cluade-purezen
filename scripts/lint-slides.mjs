@@ -128,6 +128,10 @@ for (const file of files) {
       })
     }
 
+    // ---- ルール7: スライド送りのアニメーション（transition）は使わない ----
+    if (fm.transition && fm.transition !== 'none')
+      report('error', file, at(0), 'R7', `${where}: スライド送りのアニメーションは使わない（transition: ${fm.transition} を消す）`)
+
     // ---- ルール5: 禁止語・禁止パターン ----
     lines.forEach((l, i) => {
       if (l === null)

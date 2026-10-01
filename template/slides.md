@@ -5,7 +5,6 @@ info: |
   AI の Skill（スキル）を社内に共有する資料。元ネタは notes/台本.md と notes/summary.md。
   ルールは docs/slide-rules.md、検査は npm run lint:slides。
 layout: cover
-transition: fade
 mdc: true
 htmlAttrs:
   lang: ja

@@ -18,6 +18,7 @@ description: 社内共有向けの Slidev スライド（template/slides.md と�
    - 各スライドに具体を1つ入れる（例・実物のコードやファイル・数字）。抽象語の言い換えだけの箇条書きにしない
    - 数字を書いたら同じスライドに `<Source>…</Source>` か `<Source measured>…</Source>` を置く。根拠が手元にない数字は書かない。調査結果が未入手なら `〔要記入〕` と `<Source todo />` で枠だけ作る
    - `v-click` は手順（`class: reveal-steps`）と比較（`class: reveal-compare`）だけ
+   - スライド送りのアニメーション（`transition`）は書かない
    - アイコンは carbon だけ。絵文字は使わない
    - 発表者ノート（`<!-- -->`）に、そのスライドで話すことを残す
 5. `npm run lint:slides` を実行し、error を 0 にする。error を消すために検査や禁止語リストを緩めない
