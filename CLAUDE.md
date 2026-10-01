@@ -4,86 +4,69 @@
 
 ## プロジェクト概要
 
-ある本の内容を他の人に分かりやすく伝えるためのプレゼン資料を **Slidev**（Markdown + Vue ベースのスライドツール）で作成するプロジェクト。
+社内共有用のプレゼン資料を **Slidev**（Markdown + Vue ベースのスライドツール）で作るためのテンプレート。
 
-- 詳細な計画は [docs/project-plan.md](./docs/project-plan.md) を参照。
-- 土台づくりは完了（Slidev セットアップ済み）。コンテンツは本を読み終えてから着手。
-- 2本目のデッキとして、AI議事録の調査を社内共有する `minutes/slides.md` がある（下記「AI議事録デッキ」）。
+- `main` には **テンプレートの改善だけ** を置く（`template/`・`scripts/`・`docs/slide-rules.md`・`.claude/skills/`）
+- 資料は1つにつき1ブランチ（`deck/<名前>`）。ブランチ内で `template/slides.md` を書き換える
+- テンプレートの改善を資料に取り込むときは、資料のブランチで `git merge main`
 - リポジトリ: https://github.com/tarou652/cluade-purezen
+
+| ブランチ | 中身 |
+| --- | --- |
+| `deck/skill` | Skill ― AIに「やり方」を教える技術 |
+| `deck/ai-minutes` | AI議事録ツールの調査共有（旧構成 `minutes/`） |
+| `deck/book` | 本の要約デッキ（旧構成。GitHub Pages 公開用の deploy.yml はこのブランチにある） |
+| `deck/slidev-guide` | Slidev の機能デモ（旧構成） |
+| `deck/skill-presentation` | コンサル風のスキル紹介デッキ（旧構成） |
 
 ## 技術スタック / 前提
 
-- **ツール**: Slidev（https://sli.dev）/ テーマは `@slidev/theme-seriph`
+- **ツール**: Slidev（https://sli.dev）。テーマは使わず `template/style.css` が見た目を持つ
 - **パッケージマネージャ**: npm に統一する（pnpm は使わない）
 - **Node**: 20 系（`.nvmrc` で固定。ローカルは 24 でも動作確認済み）
-- **公開先**: GitHub Pages（推奨・手軽）/ または S3 + CloudFront
 
 ## よく使うコマンド
 
-```bash
-npm install                              # 依存インストール
-npm run dev                              # 開発サーバ起動（http://localhost:3030）
-npm run build                            # dist/ に静的ビルド
-npm run build -- --base /cluade-purezen/ # GitHub Pages 公開用ビルド（base 付き）
-npm run build -- --download              # PDF 同梱でビルド（配布用）
-npm run build -- --without-notes         # 発表者ノートを除外して公開
-npm run export                           # PDF/PNG 等にエクスポート
+資料が増えてもコマンドは増やさない。すべて `template/slides.md` を対象にする。
 
-npm run dev:minutes                      # AI議事録デッキ
-npm run lint:slides                      # AI議事録デッキのルール検査（CI と同じ）
-npm run lint:slides:strict               # 共有前（〔要記入〕も 0 にする）
-npm run test:lint                        # 検査スクリプトの回帰テスト
+```bash
+npm install                  # 依存インストール
+npm run dev                  # 開発サーバ起動（http://localhost:3030）
+npm run build                # dist/ に静的ビルド
+npm run export               # PDF にエクスポート
+npm run lint:slides          # ルール検査（CI と同じ。error を 0 にする）
+npm run lint:slides:strict   # 共有前（〔要記入〕も 0 にする）
+npm run test:lint            # 検査スクリプトの回帰テスト
 ```
 
-## 想定ディレクトリ構成
+## ディレクトリ構成（main）
 
 ```
 .
-├─ slides.md              # Slidev エントリポイント（現在は機能デモデッキ）
-├─ components/            # Vue コンポーネント（自動インポート。GsapBoxes / GsapCounter）
-├─ examples/              # 雛形・サンプル（book-template.md など）
-├─ public/                # 画像など静的ファイル（/image.png で参照）
-├─ notes/                 # 章別の読書メモ（任意）
-├─ docs/                  # プロジェクトドキュメント（計画・Slidev ガイド・テンプレ）
-├─ .github/workflows/
-│  └─ deploy.yml          # GitHub Pages デプロイ（docs/templates/ にテンプレあり）
-├─ package.json
-└─ README.md
+├─ template/
+│  ├─ slides.md          # 見本デッキ。資料のブランチではこれを書き換える
+│  ├─ style.css          # 見た目（DADS トークンのみ参照・赤基調）
+│  ├─ styles/dads-tokens.css  # DADS から取り込んだトークン（直接編集しない）
+│  ├─ components/        # Cards / Stats / Compare / Flow / Layers / Callout / Source
+│  └─ setup/             # サブパス公開の 404 対策・Mermaid 配色
+├─ scripts/              # lint-slides.mjs（ルール検査）・禁止語・設定・回帰テスト
+├─ docs/slide-rules.md   # ルールの全文
+├─ .claude/skills/       # internal-slides（スライドを書く手順）ほか
+└─ .github/workflows/lint-slides.yml
 ```
 
-> 使い方の詳細は [docs/slidev-guide.md](./docs/slidev-guide.md)（アニメ / GSAP / アイコン / UI / コード）。
-> 外部ライブラリは `npm i` → `components/*.vue` 内で `import` して使うのが基本。アイコンは `@iconify-json/*` を入れて `i-<set>-<name>` クラスで使う。
+`template/` が Slidev の userRoot になるので、`style.css` / `components/` / `setup/` は `template/` 配下のものが使われる。
 
 ## 作業方針 / 規約
 
-- **スライド原則**: 「1スライド1メッセージ」。レイアウトは `cover` / `two-cols` / `center` / `section` などを活用。
-- **図解**: フロー・関係図は Mermaid を使う。
-- **段階表示**: 必要に応じて `v-click` を使う。
-- **画像**: `public/` に置き、`/image.png` の形で参照する。
-- **発表者ノート**: 各スライドに presenter notes を残す。公開物から外す場合は `--without-notes`。
-- **著作権**: 共有資料のため本文の長い転載は避け、**自分の言葉で要約**する。引用する場合は出典（書名・著者・該当箇所）を明記し、最小限にとどめる。
+- スライドを書く・直すときは `.claude/skills/internal-slides/SKILL.md` の手順に従い、`npm run lint:slides` の error を 0 にする。ルールは [docs/slide-rules.md](./docs/slide-rules.md)
+- **スライド原則**: 「1スライド1メッセージ」。見出しは主張の一文
+- **見た目**: 箇条書きだけのスライドを続けない。`template/components/` の部品（カード・数字・比較・流れ・層）で図にする
+- **色**: 赤（`--slide-key`）とグレーだけ。直接の色指定はしない。`--slide-*` / `--space-*` / DADS トークンを使う
+- **アイコン**: carbon だけ。部品の中では `<carbon-xxx />` のコンポーネント形式で書く（`i-carbon-*` クラスは Slidev のビルドで CSS が生成されない）
+- **段階表示**: `v-click` は手順（`class: reveal-steps`）と比較（`class: reveal-compare`）だけ
+- **発表者ノート**: 各スライドに presenter notes を残す
+- **数字・出典**: 創作しない。未入手のものは `〔要記入〕` と `<Source todo />` で残す
+- **著作権**: 本文の長い転載は避け、自分の言葉で要約する。引用は出典を明記して最小限に
 
-## AI議事録デッキ（minutes/）
-
-- 編集するときは `.claude/skills/internal-slides/SKILL.md` の手順に従い、`npm run lint:slides` の error を 0 にする。ルールは [docs/slide-rules.md](./docs/slide-rules.md)。
-- `minutes/` は Slidev の userRoot が別になるので、`style.css` / `components/` / `setup/` はルートのものではなく `minutes/` 配下が使われる（book.md 側の見た目には影響しない）。
-- 色・文字サイズ・余白は `minutes/styles/dads-tokens.css`（DADS から取り込んだもの。直接編集しない）を `minutes/style.css` 経由で使う。
-- 調査の数値・出典は創作しない。未入手のものは `〔要記入〕` と `<Source todo />` で残す。
-- 社内向けなので GitHub Pages（一般公開）には載せない。
-
-## デプロイ（GitHub Pages）
-
-`.github/workflows/deploy.yml` は作成済み（npm + base `/cluade-purezen/`）。
-
-1. リポジトリ Settings → Pages → Source を「GitHub Actions」に設定（**初回のみ手動**）。
-2. `main` に push すると Actions が走り、`https://tarou652.github.io/cluade-purezen/` で公開される。
-
-※ Pages の Source を設定する前に push すると build は通っても deploy ステップが失敗する。先に Source 設定を済ませること。
-
-※ サブパス公開（`/cluade-purezen/`）では、Slidev 52.x の `getSlidePath` が base を二重に付けてスライド送りが 404 になる。対策として [setup/main.ts](./setup/main.ts) のルーターガードで余分な base を剥がしている（消すと「2枚目から 404」になる）。リロード/直リンク用に deploy.yml で `404.html` を `index.html` のコピーにしている。
-
-⚠️ 公開や Slidev 機能でハマったときは [docs/troubleshooting.md](./docs/troubleshooting.md)（つまずきポイント集）を必ず参照すること。
-
-## 進め方の順序
-
-Phase 0（土台づくり）→ Phase 1（読書しながら抽出）→ Phase 2（構成設計）→ Phase 3（実装）→ Phase 4（公開）→ Phase 5（仕上げ）。詳細は [docs/project-plan.md](./docs/project-plan.md)。
+⚠️ 公開や Slidev 機能でハマったときは [docs/troubleshooting.md](./docs/troubleshooting.md)（つまずきポイント集）を参照すること。

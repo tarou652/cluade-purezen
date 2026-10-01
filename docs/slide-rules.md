@@ -1,24 +1,24 @@
 # 社内共有スライドのルール（AI議事録デッキ）
 
-`minutes/slides.md`（AI議事録の調査共有デッキ）のデザインと文体のルール。
+`template/slides.md`（社内共有スライドのテンプレート。資料は deck/* ブランチでこれを書き換える）のデザインと文体のルール。
 前回のデッキ（`book.md`）の反省から、ルールは「読んで守る」形ではなく、
 **CSS の初期値と CI の検査で「書けば守られる」形**にしている。
 
 | 仕組み | 置き場所 | 役割 |
 | --- | --- | --- |
-| DADS トークン | `minutes/styles/dads-tokens.css` | 色・文字サイズ・角丸の値（手を加えずに取り込んだもの）|
-| スライドの初期値 | `minutes/style.css` | トークンだけを参照。左揃え・引用の装飾なし・中央寄せは表紙と章扉だけ |
-| 出典表示 | `minutes/components/Source.vue` | `<Source>` / `<Source measured>` で数字の根拠を左下に出す |
+| DADS トークン | `template/styles/dads-tokens.css` | 色・文字サイズ・角丸の値（手を加えずに取り込んだもの）|
+| スライドの初期値 | `template/style.css` | トークンだけを参照。左揃え・引用の装飾なし・中央寄せは表紙と章扉だけ |
+| 出典表示 | `template/components/Source.vue` | `<Source>` / `<Source measured>` で数字の根拠を左下に出す |
 | 検査 | `scripts/lint-slides.mjs` | ルール1〜6を検出。CI（`.github/workflows/lint-slides.yml`）で実行 |
 | 禁止語 | `scripts/banned-words.txt` | ルール5の語リスト。理由をコメントで残して追記する |
 | 閾値 | `scripts/slide-lint.config.json` | アイコンセット名・見出しの文字数・v-click の上限枚数 |
 
 ```bash
-npm run dev:minutes          # 開発サーバ
+npm run dev                  # 開発サーバ
 npm run lint:slides          # 検査（未記入は警告）
 npm run lint:slides:strict   # 公開前の検査（未記入もエラー）
 npm run test:lint            # 検査スクリプト自体の回帰テスト
-npm run build:minutes        # minutes/dist に静的ビルド
+npm run build                # dist に静的ビルド
 ```
 
 ---
@@ -43,6 +43,24 @@ npm run build:minutes        # minutes/dist に静的ビルド
 - 文字サイズは DADS のスケールから選ぶ: 表紙 45px、章扉 36px、見出し 32px、本文 20px、表 18px、出典 14px
 - 余白は 8px グリッド（`--space-8` 〜 `--space-64`）
 - 書体は Noto Sans JP の1系統（DADS の `--font-family-sans`）
+
+### 色と部品
+
+- 色は白・赤・グレーの3つ。赤は前回のコンサル風デッキ（#C8102E）に近い DADS `red-900` を `--slide-key` に当てている
+  - 外周フレーム・見出し下の短線・箇条書きのマーカー・表の見出し線に赤を使う。章扉は濃い赤（`red-1100`）の地
+  - 強調は1スライドに1か所。部品の `accent` で選んだ要素だけを赤にし、残りはグレー
+- 箇条書きだけのスライドを続けると単調になり、中身も薄く見える（前回のフィードバック）。図・数字・カードは `template/components/` の部品で出す
+
+| 部品 | 使いどころ |
+| --- | --- |
+| `Cards` | 並列の3〜4要素（理由・弱点・特徴） |
+| `Stats` | 大きな数字。ルール6の検査対象（`<Stats>` があるスライドは `<Source>` 必須）|
+| `Compare` | 前と後、従来と提案の左右比較 |
+| `Flow` | 工程・順序の横並び図 |
+| `Layers` | 役割の層・積み重ね |
+| `Callout` | 図や表から言える結論を1行。1スライド1つまで |
+
+- 部品の中のアイコンは `<carbon-xxx />` のコンポーネント形式で書く。`i-carbon-*` クラスは Slidev 52 のビルドで CSS が生成されず空になる
 
 ### グラフを載せる場合
 
@@ -87,12 +105,12 @@ npm run build:minutes        # minutes/dist に静的ビルド
 ### 6. 数字には出典か実測値を添える
 
 - `<Source>書名・記事名, 発行元, 公開日</Source>` か `<Source measured>計測範囲, 時期</Source>`
-- 検査: 単位つきの数字（%・倍・件・人・分・時間・円 など。年月日は対象外）があるスライドに `<Source` がないとエラー
+- 検査: 単位つきの数字（%・倍・件・人・分・時間・円 など。年月日は対象外）か `<Stats>` があるスライドに `<Source` がないとエラー
 - まだ埋まっていない根拠は `<Source todo />` と `〔要記入〕` で置く。通常の検査では警告、`--strict` ではエラー
 
 ### 7. 1〜6 を CI で検査する
 
-- `.github/workflows/lint-slides.yml` が `minutes/` と `scripts/` の変更時に `test:lint` → `lint:slides` → `build:minutes` を実行する
+- `.github/workflows/lint-slides.yml` が `template/` と `scripts/` の変更時に `test:lint` → `lint:slides` → `build` を実行する
 
 ---
 
@@ -105,4 +123,4 @@ npm run build:minutes        # minutes/dist に静的ビルド
 ## 公開について
 
 このデッキは社内向けなので、`deploy.yml`（GitHub Pages・一般公開）には含めていない。
-共有は `npm run build:minutes` の成果物か、`npm run export:minutes` の PDF で行う。
+共有は `npm run build` の成果物か、`npm run export` の PDF で行う。

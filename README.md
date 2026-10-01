@@ -1,55 +1,60 @@
-# cluade-purezen — Book Summary Slides
+# cluade-purezen — 社内共有スライドのテンプレート
 
-ある本の内容を、他の人にも分かりやすく伝えるためのプレゼン資料を [Slidev](https://sli.dev) で作成するプロジェクト。
+[Slidev](https://sli.dev) で社内共有用のスライドを作るためのテンプレート。
+`main` にはテンプレートだけを置き、**資料は1つにつき1ブランチ**（`deck/<名前>`）で作る。
 
-## セットアップ
+## 資料を作る
 
 ```bash
 npm install
+git switch -c deck/<名前> main   # 資料ごとにブランチを切る
+npm run dev                      # template/slides.md を http://localhost:3030 で開く
 ```
 
-## 開発
+`template/slides.md` を書き換える。コマンドは資料が増えても変わらない。
 
 ```bash
-npm run dev        # http://localhost:3030 でプレビュー
-```
-
-スライド本体は [slides.md](./slides.md) を編集します。
-
-## ビルド
-
-```bash
-npm run build                            # dist/ に静的出力
-npm run build -- --base /cluade-purezen/ # GitHub Pages 公開用
-```
-
-## 公開（GitHub Pages）
-
-`main` に push すると [GitHub Actions](.github/workflows/deploy.yml) が自動でビルド・デプロイします。
-初回のみ、リポジトリ Settings → Pages → Source を「GitHub Actions」に設定してください。
-
-公開 URL: https://tarou652.github.io/cluade-purezen/
-
-## AI議事録デッキ（社内共有用）
-
-[minutes/slides.md](./minutes/slides.md)。デジタル庁デザインシステム（DADS）のトークンを使い、
-見た目と文体のルールを CI で検査する。ルールは [docs/slide-rules.md](./docs/slide-rules.md)。
-
-```bash
-npm run dev:minutes          # プレビュー
+npm run dev                  # プレビュー
 npm run lint:slides          # ルール検査（未記入は警告）
 npm run lint:slides:strict   # 共有前の検査（未記入もエラー）
-npm run build:minutes        # minutes/dist に静的出力（GitHub Pages には載せない）
+npm run build                # dist/ に静的出力
+npm run export               # PDF に書き出し
+npm run test:lint            # 検査スクリプト自体の回帰テスト
 ```
 
-## ドキュメント
+テンプレートの改善（部品・style.css・lint）は `main` で行い、各資料のブランチには `git merge main` で取り込む。
 
-- [docs/project-plan.md](./docs/project-plan.md) — プロジェクト計画（Phase 0〜5）
-- [docs/slide-rules.md](./docs/slide-rules.md) — 社内共有スライドのルールと検査
-- [CLAUDE.md](./CLAUDE.md) — 開発ガイド
+## ブランチ
+
+| ブランチ | 中身 |
+| --- | --- |
+| `main` | テンプレート（`template/`）・検査（`scripts/`）・ルール（`docs/slide-rules.md`） |
+| `deck/skill` | Skill ― AIに「やり方」を教える技術 |
+| `deck/ai-minutes` | AI議事録ツールの調査共有 |
+| `deck/book` | 本の要約デッキ（GitHub Pages で公開。push で deploy が走る） |
+| `deck/slidev-guide` | Slidev の機能デモ |
+| `deck/skill-presentation` | コンサル風のスキル紹介デッキ（旧デザイン） |
+
+## デザイン
+
+- 白地・赤（DADS red-900）・グレーの3色。赤い外周フレーム、見出し下の赤い短線
+- 色・文字サイズ・余白は DADS（デジタル庁デザインシステム）のトークンだけを使う
+- 図・数字・カードは `template/components/` の部品で出す
+
+| 部品 | 使いどころ |
+| --- | --- |
+| `<Cards>` | 並列の3〜4要素（理由・弱点・特徴） |
+| `<Stats>` | 大きな数字（`<Source>` 必須） |
+| `<Compare>` | 前と後、従来と提案の左右比較 |
+| `<Flow>` | 工程・順序の横並び図 |
+| `<Layers>` | 役割の層・積み重ね |
+| `<Callout>` | スライドの結論1行 |
+| `<Source>` | 数字の出典・実測の表示 |
+
+ルールの全文は [docs/slide-rules.md](./docs/slide-rules.md)、開発ガイドは [CLAUDE.md](./CLAUDE.md)。
 
 ## 技術スタック
 
-- Slidev（テーマ: `@slidev/theme-seriph`）
+- Slidev（テーマなし。`template/style.css` が見た目を持つ）
 - パッケージマネージャ: npm
 - Node 20 系（`.nvmrc`）
