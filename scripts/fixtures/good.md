@@ -31,3 +31,11 @@ class: reveal-steps
 - 作業時間が 50% 減った
 
 <Source measured>検査用の例, 2026-09</Source>
+
+---
+
+# 出典を添えれば数字の部品も載せてよいことを確かめる
+
+<Stats :items="[{ value: '50', unit: '%', label: '削減' }]" />
+
+<Source measured>検査用の例, 2026-09</Source>

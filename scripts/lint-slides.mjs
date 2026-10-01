@@ -148,6 +148,10 @@ for (const file of files) {
     const numLine = lines.findIndex(l => l !== null && NUMBER_WITH_UNIT.test(l.replace(/<Source\b[^>]*>.*?<\/Source>/g, '').replace(/<[^>]+>/g, '')))
     if (numLine !== -1 && !hasSource)
       report('error', file, at(numLine), 'R6', `数字には <Source>（出典）か <Source measured>（実測）を添える: ${lines[numLine].trim().slice(0, 50)}`)
+    // <Stats> は数字と単位を別の props に書くので、上の正規表現では拾えない。部品があれば出典を必須にする
+    const statsLine = lines.findIndex(l => l !== null && /<Stats\b/.test(l))
+    if (statsLine !== -1 && !hasSource)
+      report('error', file, at(statsLine), 'R6', `数字には <Source>（出典）か <Source measured>（実測）を添える（<Stats> を使うスライド）`)
 
     // 未記入のまま残っている出典・プレースホルダーは警告（--strict でエラー）
     lines.forEach((l, i) => {

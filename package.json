@@ -6,17 +6,11 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "slidev book.md --open",
-    "dev:guide": "slidev slides.md --open",
-    "dev:skill": "slidev skill-presentation.md --open",
-    "build": "slidev build book.md --out dist && slidev build slides.md --base /guide/ --out dist/guide",
-    "build:pages": "slidev build book.md --base /cluade-purezen/ --out dist && slidev build slides.md --base /cluade-purezen/guide/ --out dist/guide",
-    "export": "slidev export book.md",
-    "dev:minutes": "slidev minutes/slides.md --open",
-    "build:minutes": "slidev build minutes/slides.md --out dist",
-    "export:minutes": "slidev export minutes/slides.md",
-    "lint:slides": "node scripts/lint-slides.mjs minutes/slides.md",
-    "lint:slides:strict": "node scripts/lint-slides.mjs --strict minutes/slides.md",
+    "dev": "slidev template/slides.md --open",
+    "build": "slidev build template/slides.md --out dist",
+    "export": "slidev export template/slides.md",
+    "lint:slides": "node scripts/lint-slides.mjs template/slides.md",
+    "lint:slides:strict": "node scripts/lint-slides.mjs --strict template/slides.md",
     "test:lint": "node scripts/test-lint-slides.mjs"
   },
   "dependencies": {
