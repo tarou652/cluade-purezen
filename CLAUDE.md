@@ -8,6 +8,7 @@
 
 - 詳細な計画は [docs/project-plan.md](./docs/project-plan.md) を参照。
 - 土台づくりは完了（Slidev セットアップ済み）。コンテンツは本を読み終えてから着手。
+- 2本目のデッキとして、AI議事録の調査を社内共有する `minutes/slides.md` がある（下記「AI議事録デッキ」）。
 - リポジトリ: https://github.com/tarou652/cluade-purezen
 
 ## 技術スタック / 前提
@@ -27,6 +28,11 @@ npm run build -- --base /cluade-purezen/ # GitHub Pages 公開用ビルド（bas
 npm run build -- --download              # PDF 同梱でビルド（配布用）
 npm run build -- --without-notes         # 発表者ノートを除外して公開
 npm run export                           # PDF/PNG 等にエクスポート
+
+npm run dev:minutes                      # AI議事録デッキ
+npm run lint:slides                      # AI議事録デッキのルール検査（CI と同じ）
+npm run lint:slides:strict               # 共有前（〔要記入〕も 0 にする）
+npm run test:lint                        # 検査スクリプトの回帰テスト
 ```
 
 ## 想定ディレクトリ構成
@@ -56,6 +62,14 @@ npm run export                           # PDF/PNG 等にエクスポート
 - **画像**: `public/` に置き、`/image.png` の形で参照する。
 - **発表者ノート**: 各スライドに presenter notes を残す。公開物から外す場合は `--without-notes`。
 - **著作権**: 共有資料のため本文の長い転載は避け、**自分の言葉で要約**する。引用する場合は出典（書名・著者・該当箇所）を明記し、最小限にとどめる。
+
+## AI議事録デッキ（minutes/）
+
+- 編集するときは `.claude/skills/internal-slides/SKILL.md` の手順に従い、`npm run lint:slides` の error を 0 にする。ルールは [docs/slide-rules.md](./docs/slide-rules.md)。
+- `minutes/` は Slidev の userRoot が別になるので、`style.css` / `components/` / `setup/` はルートのものではなく `minutes/` 配下が使われる（book.md 側の見た目には影響しない）。
+- 色・文字サイズ・余白は `minutes/styles/dads-tokens.css`（DADS から取り込んだもの。直接編集しない）を `minutes/style.css` 経由で使う。
+- 調査の数値・出典は創作しない。未入手のものは `〔要記入〕` と `<Source todo />` で残す。
+- 社内向けなので GitHub Pages（一般公開）には載せない。
 
 ## デプロイ（GitHub Pages）
 

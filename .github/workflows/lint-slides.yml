@@ -1,0 +1,36 @@
+name: Lint slides
+
+# AI議事録デッキ（minutes/）のルール1〜6を検査する。ルールは docs/slide-rules.md。
+# 〔要記入〕などの未記入は警告止まり。公開前のチェックは手元で npm run lint:slides:strict。
+on:
+  push:
+    paths:
+      - 'minutes/**'
+      - 'scripts/**'
+      - 'package.json'
+      - '.github/workflows/lint-slides.yml'
+  pull_request:
+    paths:
+      - 'minutes/**'
+      - 'scripts/**'
+      - 'package.json'
+      - '.github/workflows/lint-slides.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # 検査スクリプト自体が壊れていないか（悪い例を検出し、良い例を通す）
+      - run: npm run test:lint
+      - run: npm run lint:slides
+      - run: npm run build:minutes

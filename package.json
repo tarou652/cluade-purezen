@@ -12,7 +12,12 @@
     "build": "slidev build book.md --out dist && slidev build slides.md --base /guide/ --out dist/guide",
     "build:pages": "slidev build book.md --base /cluade-purezen/ --out dist && slidev build slides.md --base /cluade-purezen/guide/ --out dist/guide",
     "export": "slidev export book.md",
-    "export:skill": "slidev export skill-presentation.md --format pptx --output skill-presentation.pptx"
+    "dev:minutes": "slidev minutes/slides.md --open",
+    "build:minutes": "slidev build minutes/slides.md --out dist",
+    "export:minutes": "slidev export minutes/slides.md",
+    "lint:slides": "node scripts/lint-slides.mjs minutes/slides.md",
+    "lint:slides:strict": "node scripts/lint-slides.mjs --strict minutes/slides.md",
+    "test:lint": "node scripts/test-lint-slides.mjs"
   },
   "dependencies": {
     "@slidev/cli": "^52.16.0",
