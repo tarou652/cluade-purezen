@@ -2,7 +2,8 @@ name: Deploy Slidev to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    # main はテンプレート専用。本のデッキは deck/book ブランチから公開する
+    branches: [deck/book]
   workflow_dispatch:
 
 permissions:
