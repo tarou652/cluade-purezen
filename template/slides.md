@@ -7,6 +7,8 @@ info: |
 layout: cover
 transition: fade
 mdc: true
+htmlAttrs:
+  lang: ja
 fonts:
   sans: Noto Sans JP
   mono: Noto Sans Mono
