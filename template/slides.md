@@ -5,7 +5,6 @@ info: |
   社内共有スライドのテンプレート。資料ごとに deck/<名前> ブランチを切り、このファイルを書き換える。
   ルールは docs/slide-rules.md、検査は npm run lint:slides。
 layout: cover
-transition: fade
 mdc: true
 htmlAttrs:
   lang: ja

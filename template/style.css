@@ -251,4 +251,7 @@
  * v-click は class: reveal-steps（手順）か reveal-compare（比較）を付けたスライドだけで使う。
  * 手順は済んだ項目をディムして「今どこか」を示す。比較は並べたまま残す。
  */
-.reveal-steps .slidev-vclick-prior { opacity: 0.45; transition: opacity 0.2s; }
+.reveal-steps .slidev-vclick-prior { opacity: 0.45; }
+
+/* スライド送り・クリックでの表示切り替えはアニメーションさせない（即時に切り替える）*/
+.slidev-vclick-target { transition: none !important; }

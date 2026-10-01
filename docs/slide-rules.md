@@ -9,7 +9,7 @@
 | DADS トークン | `template/styles/dads-tokens.css` | 色・文字サイズ・角丸の値（手を加えずに取り込んだもの）|
 | スライドの初期値 | `template/style.css` | トークンだけを参照。左揃え・引用の装飾なし・中央寄せは表紙と章扉だけ |
 | 出典表示 | `template/components/Source.vue` | `<Source>` / `<Source measured>` で数字の根拠を左下に出す |
-| 検査 | `scripts/lint-slides.mjs` | ルール1〜6を検出。CI（`.github/workflows/lint-slides.yml`）で実行 |
+| 検査 | `scripts/lint-slides.mjs` | ルール1〜7を検出。CI（`.github/workflows/lint-slides.yml`）で実行 |
 | 禁止語 | `scripts/banned-words.txt` | ルール5の語リスト。理由をコメントで残して追記する |
 | 閾値 | `scripts/slide-lint.config.json` | アイコンセット名・見出しの文字数・v-click の上限枚数 |
 
@@ -108,7 +108,13 @@ npm run build                # dist に静的ビルド
 - 検査: 単位つきの数字（%・倍・件・人・分・時間・円 など。年月日は対象外）か `<Stats>` があるスライドに `<Source` がないとエラー
 - まだ埋まっていない根拠は `<Source todo />` と `〔要記入〕` で置く。通常の検査では警告、`--strict` ではエラー
 
-### 7. 1〜6 を CI で検査する
+### 7. スライド送りのアニメーションは使わない
+
+- スライドを進めるときは即時に切り替える。`transition: fade` などを headmatter にもスライドの frontmatter にも書かない
+- クリックで要素を出すとき（v-click）も、`style.css` がフェードを無効にしている
+- 検査: `transition` が `none` 以外ならエラー
+
+### 8. 1〜7 を CI で検査する
 
 - `.github/workflows/lint-slides.yml` が `template/` と `scripts/` の変更時に `test:lint` → `lint:slides` → `build` を実行する
 

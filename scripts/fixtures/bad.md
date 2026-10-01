@@ -1,6 +1,7 @@
 ---
 title: 検査が効くことを確かめるための悪い例
 layout: cover
+transition: fade
 ---
 
 # 表紙は中央寄せでよい

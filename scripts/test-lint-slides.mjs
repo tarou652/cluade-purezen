@@ -28,6 +28,7 @@ for (const [rule, text] of [
   ['R5', '引用ブロックは出典つき'],
   ['R6', '数字には <Source>'],
   ['R6', '<Stats> を使うスライド'],
+  ['R7', 'スライド送りのアニメーションは使わない'],
 ])
   expect(bad.stdout.split('\n').some(l => l.includes(`[${rule}]`) && l.includes(text)), `${rule}: 「${text}」を検出する`)
 
